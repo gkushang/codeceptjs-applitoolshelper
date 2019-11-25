@@ -1,4 +1,4 @@
-[![NPM](https://nodei.co/npm/codeceptjs-applitoolshelper.png?compact=true)](https://nodei.co/npm/codeceptjs-applitoolshelper/)
+[![NPM](https://nodei.co/npm/codeceptjs-applitoolshelper.png?compact=true)](https://nodei.co/npm/codeceptjs-applitoolshelper/) [![Greenkeeper badge](https://badges.greenkeeper.io/PeterNgTr/codeceptjs-applitoolshelper.svg)](https://greenkeeper.io/)
 
 # codeceptjs-applitoolshelper
 CodeceptJS Applitools helper to integrate the applitool

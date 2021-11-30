@@ -1,47 +1,25 @@
-const { Eyes: wdioEyes, Target: wdioTarget } = require("@applitools/eyes-webdriverio");
-
-let eyes;
-let Helper = codecept_helper;
-let windowsSize;
-let appName;
-let client;
+const {
+  Eyes: wdioEyes,
+  Target: wdioTarget,
+} = require("@applitools/eyes-webdriverio");
+const { Eyes: pwEyes } = require("@applitools/eyes-playwright");
 
 class ApplitoolsHelper extends Helper {
   constructor(config) {
     super(config);
     this.config = config;
-    appName = config.appName || "Application Under Test";
-    eyes = new wdioEyes(config.serverUrl || "");
   }
 
-  async _beforeSuite() {
-    this.helpers["WebDriver"].config.manualStart = true;
-    this.helpers["WebDriver"].options.manualStart = true;
-    if (this.config.windowSize) {
-      windowsSize = this._getWindowsSize(this.config);
-    } else if (this.helpers["WebDriver"].config.windowSize) {
-      windowsSize = this._getWindowsSize(this.helpers["WebDriver"].config);
+  async _before() {
+    if (this.helpers.WebDriver) {
+      this.eyes = new wdioEyes(this.config.serverUrl || "");
+      const { browser } = this.helpers.WebDriver;
+      this.client = browser;
     } else {
-      windowsSize = { width: 1920, height: 600 };
+      this.eyes = new pwEyes(this.config.serverUrl || "");
+      const { page } = this.helpers.Playwright;
+      this.client = page;
     }
-    if (client) {
-      await this.helpers["WebDriver"]._stopBrowser();
-    }
-    client = await this.helpers["WebDriver"]._startBrowser();
-  }
-
-  _getWindowsSize(config) {
-    return {
-      width: parseInt(config.windowSize.split("x")[0], 10),
-      height: parseInt(config.windowSize.split("x")[1], 10),
-    };
-  }
-
-  _generateRandomString() {
-    return (
-      Math.random().toString(36).substring(2, 15) +
-      Math.random().toString(36).substring(2, 15)
-    );
   }
 
   /**
@@ -51,18 +29,19 @@ class ApplitoolsHelper extends Helper {
    *
    */
   async eyeCheck(pageName, uniqueId, matchLevel) {
-    eyes.setForceFullPageScreenshot(true);
+    this.eyes.setForceFullPageScreenshot(true);
+
     if (uniqueId) {
-      eyes.setBatch(pageName, uniqueId);
+      this.eyes.setBatch(pageName, uniqueId);
     }
 
     if (matchLevel) {
-      eyes.setMatchLevel(matchLevel);
+      this.eyes.setMatchLevel(matchLevel);
     }
 
-    await eyes.open(client, appName, pageName, windowsSize);
-    await eyes.check(pageName, wdioTarget.window().fully());
-    await eyes.close();
+    await this.eyes.open(this.client, appName, pageName, windowsSize);
+    await this.eyes.check(pageName, wdioTarget.window().fully());
+    await this.eyes.close();
   }
 }
 

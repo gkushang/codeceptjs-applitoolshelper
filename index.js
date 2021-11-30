@@ -60,7 +60,7 @@ class ApplitoolsHelper extends Helper {
     }
 
     await eyes.open(client, appName, pageName, windowsSize);
-    await eyes.check(pageName, Target.window());
+    await eyes.check(pageName, Target.window().fully());
     await eyes.close();
   }
 }

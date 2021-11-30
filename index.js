@@ -50,7 +50,6 @@ class ApplitoolsHelper extends Helper {
    *
    */
   async eyeCheck(pageName, uniqueId, matchLevel) {
-    eyes.setApiKey(this.config.applitoolsKey);
     eyes.setForceFullPageScreenshot(true);
     if (uniqueId) {
       eyes.setBatch(pageName, uniqueId);

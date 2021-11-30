@@ -1,4 +1,5 @@
-const { Eyes, Target } = require("@wdio/eyes.webdriverio");
+const { Eyes: wdioEyes, Target: wdioTarget } = require("@applitools/eyes-webdriverio");
+
 let eyes;
 let Helper = codecept_helper;
 let windowsSize;
@@ -10,7 +11,7 @@ class ApplitoolsHelper extends Helper {
     super(config);
     this.config = config;
     appName = config.appName || "Application Under Test";
-    eyes = new Eyes(config.serverUrl || "");
+    eyes = new wdioEyes(config.serverUrl || "");
   }
 
   async _beforeSuite() {
@@ -60,7 +61,7 @@ class ApplitoolsHelper extends Helper {
     }
 
     await eyes.open(client, appName, pageName, windowsSize);
-    await eyes.check(pageName, Target.window().fully());
+    await eyes.check(pageName, wdioTarget.window().fully());
     await eyes.close();
   }
 }

@@ -8,6 +8,7 @@ class ApplitoolsHelper extends Helper {
   constructor(config) {
     super(config);
     this.config = config;
+    this.appName = config.appName || 'Application Under Test';
   }
 
   async _before() {
@@ -39,7 +40,7 @@ class ApplitoolsHelper extends Helper {
       this.eyes.setMatchLevel(matchLevel);
     }
 
-    await this.eyes.open(this.client, appName, pageName, windowsSize);
+    await this.eyes.open(this.client, this.appName, pageName);
     await this.eyes.check(pageName, wdioTarget.window().fully());
     await this.eyes.close();
   }
